@@ -1,36 +1,51 @@
 from tkinter import *
-
+check = 0
 #functions
-def new_frame(n="", path="", x='', y=''):
-    frame = Tk()
-    frame.title(n)
-    if (x != 0 and y != 0):
-        frame.geometry(x + 'x' + y)
-    if (path != ""):
-        frame.iconbitmap(path)
-    frame.tkraise()
-    return frame
+def new_window(n="New Window", x='400x600'):
+    window = Toplevel(tkWindow)
+    window.geometry(x)
+    window.title(n)
+    canvas = Canvas(window, height=400, width=600).pack()
+    return window
 
+def swap_gui(x,y):
+    global check
+    y.withdraw()
+    check = 0
 def open_cam():
-    tkWindow.withdraw()
-    cam_frame = new_frame("Camera", "", '400', '600')
-    #back_btn1 = Button(cam_frame, text="Back", command=swap_frame(cam_frame,prev)).grid(row=7, column=7)
+    global check
+    if (check != 0):
+        return
+    cam_frame = new_window("Camera Window")
+    check = 1
+    back_btn1 = Button(cam_frame, text="Back", command=lambda : swap_gui(tkWindow,cam_frame)).pack()
+    Exit_btn = Button(cam_frame, text="Exit", command=lambda : exit()).pack()
 
 def select_img():
-    tkWindow.withdraw()
-    img_frame = new_frame("Image", "", '400', '600')
-    #back_btn2 = Button(img_frame, text="Back", command=swap_frame(img_frame, prev)).grid(row=7, column=7)
+    global check
+    if (check != 0):
+        return
+    img_frame = new_window("Image Window")
+    check = 1
+    back_btn2 = Button(img_frame, text="Back", command=lambda : swap_gui(tkWindow,img_frame)).pack()
+    Exit_btn = Button(new_window, text="Exit", command=lambda: exit()).pack()
 
 def select_vid():
-    tkWindow.withdraw()
-    vid_frame = new_frame("Video", "", '400', '600')
-    #back_btn3 = Button(vid_frame, text="Back", command=swap_frame(vid_frame, prev)).grid(row=7, column=7)
+    global check
+    if (check != 0):
+        return
+    vid_frame = new_window("Video Window")
+    check = 1
+    back_btn3 = Button(vid_frame, text="Back", command=lambda : swap_gui(tkWindow,vid_frame)).pack()
+    Exit_btn = Button(vid_frame, text="Exit", command=lambda : exit()).pack()
 
 tkWindow = Tk()
 tkWindow.title("Safety Agent")
 tkWindow.geometry('400x600')
-Lbl = Label(tkWindow, text="Choose A Source").grid(row=3, column=7)
-cam_btn = Button(tkWindow, text="Camera", command=open_cam).grid(row=7, column=7)
-img_btn = Button(tkWindow, text="Image", command=select_img).grid(row=10, column=7)
-vid_btn = Button(tkWindow, text="Video", command=select_vid).grid(row=13, column=7)
+canvas = Canvas(tkWindow, height=400, width=600).pack()
+Lbl = Label(tkWindow, text="Choose A Source").pack()
+cam_btn = Button(tkWindow, text="Camera", command=open_cam).pack()
+img_btn = Button(tkWindow, text="Image", command=select_img).pack()
+vid_btn = Button(tkWindow, text="Video", command=select_vid).pack()
+Exit_btn = Button(tkWindow, text="Exit", command=lambda:exit()).pack()
 tkWindow.mainloop()
